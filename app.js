@@ -151,105 +151,148 @@ function calculateTotals() {
     };
 }
 
-// Export to PDF
+// Export to PDF (using print to PDF functionality)
 function exportToPDF() {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-    
-    // Add title
-    doc.setFontSize(20);
-    doc.text('Laporan Kas ArBonKas', 14, 20);
-    
-    // Add date
-    doc.setFontSize(10);
-    doc.text('Tanggal: ' + new Date().toLocaleDateString('id-ID'), 14, 28);
-    
-    // Add summary
+    // Create a new window with the report
+    const printWindow = window.open('', '_blank');
     const totals = calculateTotals();
-    doc.setFontSize(12);
-    doc.text('Ringkasan:', 14, 38);
-    doc.setFontSize(10);
-    doc.text('Total Pemasukan: ' + formatCurrency(totals.totalIncome), 14, 45);
-    doc.text('Total Pengeluaran: ' + formatCurrency(totals.totalExpense), 14, 52);
-    doc.text('Saldo: ' + formatCurrency(totals.balance), 14, 59);
     
-    // Prepare table data
-    const tableData = transactions
-        .sort((a, b) => new Date(b.date) - new Date(a.date))
-        .map((t, index) => [
-            index + 1,
-            formatDate(t.date),
-            t.description,
-            t.category,
-            t.type === 'income' ? formatCurrency(t.amount) : '-',
-            t.type === 'expense' ? formatCurrency(t.amount) : '-'
-        ]);
+    const htmlContent = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>Laporan Kas ArBonKas</title>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    padding: 20px;
+                }
+                h1 {
+                    text-align: center;
+                    color: #333;
+                }
+                .summary {
+                    margin: 20px 0;
+                    padding: 15px;
+                    background: #f8f9fa;
+                    border-radius: 5px;
+                }
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin-top: 20px;
+                }
+                th, td {
+                    border: 1px solid #ddd;
+                    padding: 10px;
+                    text-align: left;
+                }
+                th {
+                    background-color: #667eea;
+                    color: white;
+                }
+                .income {
+                    color: #0d8050;
+                    font-weight: bold;
+                }
+                .expense {
+                    color: #c41e3a;
+                    font-weight: bold;
+                }
+                @media print {
+                    button { display: none; }
+                }
+            </style>
+        </head>
+        <body>
+            <h1>LAPORAN KAS ARBONKAS</h1>
+            <p style="text-align: center;">Tanggal: ${new Date().toLocaleDateString('id-ID')}</p>
+            
+            <div class="summary">
+                <h2>Ringkasan</h2>
+                <p><strong>Total Pemasukan:</strong> ${formatCurrency(totals.totalIncome)}</p>
+                <p><strong>Total Pengeluaran:</strong> ${formatCurrency(totals.totalExpense)}</p>
+                <p><strong>Saldo:</strong> ${formatCurrency(totals.balance)}</p>
+            </div>
+            
+            <h2>Detail Transaksi</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Tanggal</th>
+                        <th>Keterangan</th>
+                        <th>Kategori</th>
+                        <th>Pemasukan</th>
+                        <th>Pengeluaran</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${transactions
+                        .sort((a, b) => new Date(b.date) - new Date(a.date))
+                        .map((t, index) => `
+                            <tr>
+                                <td>${index + 1}</td>
+                                <td>${formatDate(t.date)}</td>
+                                <td>${t.description}</td>
+                                <td>${t.category}</td>
+                                <td class="income">${t.type === 'income' ? formatCurrency(t.amount) : '-'}</td>
+                                <td class="expense">${t.type === 'expense' ? formatCurrency(t.amount) : '-'}</td>
+                            </tr>
+                        `).join('')}
+                </tbody>
+            </table>
+            
+            <button onclick="window.print()" style="margin-top: 20px; padding: 10px 20px; background: #667eea; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                Print / Save as PDF
+            </button>
+            <button onclick="window.close()" style="margin-top: 20px; margin-left: 10px; padding: 10px 20px; background: #666; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                Close
+            </button>
+        </body>
+        </html>
+    `;
     
-    // Add table
-    doc.autoTable({
-        head: [['No', 'Tanggal', 'Keterangan', 'Kategori', 'Pemasukan', 'Pengeluaran']],
-        body: tableData,
-        startY: 70,
-        styles: { fontSize: 9 },
-        headStyles: { fillColor: [102, 126, 234] }
-    });
-    
-    // Save PDF
-    doc.save('laporan-kas-arbonkas.pdf');
+    printWindow.document.write(htmlContent);
+    printWindow.document.close();
 }
 
-// Export to Excel
+// Export to Excel (CSV format)
 function exportToExcel() {
     const totals = calculateTotals();
     
-    // Prepare summary data
-    const summaryData = [
-        ['LAPORAN KAS ARBONKAS'],
-        ['Tanggal: ' + new Date().toLocaleDateString('id-ID')],
-        [],
-        ['RINGKASAN'],
-        ['Total Pemasukan', formatCurrency(totals.totalIncome)],
-        ['Total Pengeluaran', formatCurrency(totals.totalExpense)],
-        ['Saldo', formatCurrency(totals.balance)],
-        [],
-        ['DETAIL TRANSAKSI'],
-        ['No', 'Tanggal', 'Keterangan', 'Kategori', 'Pemasukan', 'Pengeluaran']
-    ];
+    // Create CSV content
+    let csvContent = 'LAPORAN KAS ARBONKAS\n';
+    csvContent += 'Tanggal: ' + new Date().toLocaleDateString('id-ID') + '\n\n';
+    csvContent += 'RINGKASAN\n';
+    csvContent += 'Total Pemasukan,' + totals.totalIncome + '\n';
+    csvContent += 'Total Pengeluaran,' + totals.totalExpense + '\n';
+    csvContent += 'Saldo,' + totals.balance + '\n\n';
+    csvContent += 'DETAIL TRANSAKSI\n';
+    csvContent += 'No,Tanggal,Keterangan,Kategori,Pemasukan,Pengeluaran\n';
     
-    // Prepare transaction data
-    const transactionData = transactions
+    // Add transactions
+    transactions
         .sort((a, b) => new Date(b.date) - new Date(a.date))
-        .map((t, index) => [
-            index + 1,
-            formatDate(t.date),
-            t.description,
-            t.category,
-            t.type === 'income' ? t.amount : '-',
-            t.type === 'expense' ? t.amount : '-'
-        ]);
+        .forEach((t, index) => {
+            csvContent += `${index + 1},"${formatDate(t.date)}","${t.description}","${t.category}",`;
+            csvContent += `${t.type === 'income' ? t.amount : ''},${t.type === 'expense' ? t.amount : ''}\n`;
+        });
     
-    // Combine all data
-    const excelData = [...summaryData, ...transactionData];
-    
-    // Create workbook and worksheet
-    const wb = XLSX.utils.book_new();
-    const ws = XLSX.utils.aoa_to_sheet(excelData);
-    
-    // Set column widths
-    ws['!cols'] = [
-        { wch: 5 },  // No
-        { wch: 20 }, // Tanggal
-        { wch: 30 }, // Keterangan
-        { wch: 15 }, // Kategori
-        { wch: 15 }, // Pemasukan
-        { wch: 15 }  // Pengeluaran
-    ];
-    
-    XLSX.utils.book_append_sheet(wb, ws, 'Laporan Kas');
-    XLSX.writeFile(wb, 'laporan-kas-arbonkas.xlsx');
+    // Create and download file
+    const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', 'laporan-kas-arbonkas.csv');
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 }
 
-// Export to Word
+// Export to Word (HTML format)
 function exportToWord() {
     const totals = calculateTotals();
     
@@ -319,117 +362,155 @@ function exportToWord() {
         type: 'application/msword'
     });
     
-    saveAs(blob, 'laporan-kas-arbonkas.doc');
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', 'laporan-kas-arbonkas.doc');
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 }
 
-// Export to PowerPoint
+// Export to PowerPoint (HTML presentation format)
 function exportToPPT() {
-    const pptx = new PptxGenJS();
     const totals = calculateTotals();
     
-    // Slide 1: Title
-    let slide1 = pptx.addSlide();
-    slide1.background = { color: '667eea' };
-    slide1.addText('LAPORAN KAS ARBONKAS', {
-        x: 1,
-        y: 2,
-        w: '80%',
-        h: 1.5,
-        fontSize: 44,
-        bold: true,
-        color: 'FFFFFF',
-        align: 'center'
-    });
-    slide1.addText('Tanggal: ' + new Date().toLocaleDateString('id-ID'), {
-        x: 1,
-        y: 4,
-        w: '80%',
-        fontSize: 18,
-        color: 'FFFFFF',
-        align: 'center'
-    });
+    // Create HTML content
+    let htmlContent = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>Laporan Kas ArBonKas</title>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    margin: 0;
+                    padding: 0;
+                }
+                .slide {
+                    width: 960px;
+                    height: 720px;
+                    padding: 40px;
+                    page-break-after: always;
+                    box-sizing: border-box;
+                    border: 1px solid #ddd;
+                    margin: 20px auto;
+                }
+                .slide-1 {
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    color: white;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                }
+                .slide-1 h1 {
+                    font-size: 48px;
+                    margin-bottom: 20px;
+                }
+                .slide-2, .slide-3 {
+                    background: white;
+                }
+                h2 {
+                    color: #667eea;
+                    border-bottom: 3px solid #667eea;
+                    padding-bottom: 10px;
+                }
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin-top: 20px;
+                }
+                th, td {
+                    border: 1px solid #ddd;
+                    padding: 12px;
+                    text-align: left;
+                }
+                th {
+                    background-color: #667eea;
+                    color: white;
+                }
+                .income {
+                    color: #0d8050;
+                    font-weight: bold;
+                }
+                .expense {
+                    color: #c41e3a;
+                    font-weight: bold;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="slide slide-1">
+                <h1>LAPORAN KAS ARBONKAS</h1>
+                <p style="font-size: 24px;">Tanggal: ${new Date().toLocaleDateString('id-ID')}</p>
+            </div>
+            
+            <div class="slide slide-2">
+                <h2>Ringkasan Keuangan</h2>
+                <table>
+                    <tr>
+                        <th>Kategori</th>
+                        <th>Jumlah</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Total Pemasukan</strong></td>
+                        <td class="income">${formatCurrency(totals.totalIncome)}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Total Pengeluaran</strong></td>
+                        <td class="expense">${formatCurrency(totals.totalExpense)}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Saldo</strong></td>
+                        <td><strong>${formatCurrency(totals.balance)}</strong></td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div class="slide slide-3">
+                <h2>Detail Transaksi</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Tanggal</th>
+                            <th>Keterangan</th>
+                            <th>Kategori</th>
+                            <th>Pemasukan</th>
+                            <th>Pengeluaran</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${transactions
+                            .sort((a, b) => new Date(b.date) - new Date(a.date))
+                            .slice(0, 8)
+                            .map((t, index) => `
+                                <tr>
+                                    <td>${index + 1}</td>
+                                    <td>${formatDate(t.date)}</td>
+                                    <td>${t.description}</td>
+                                    <td>${t.category}</td>
+                                    <td class="income">${t.type === 'income' ? formatCurrency(t.amount) : '-'}</td>
+                                    <td class="expense">${t.type === 'expense' ? formatCurrency(t.amount) : '-'}</td>
+                                </tr>
+                            `).join('')}
+                    </tbody>
+                </table>
+                ${transactions.length > 8 ? `<p style="margin-top: 10px; font-style: italic;">Menampilkan 8 dari ${transactions.length} transaksi</p>` : ''}
+            </div>
+            
+            <script>
+                setTimeout(() => window.print(), 500);
+            </script>
+        </body>
+        </html>
+    `;
     
-    // Slide 2: Summary
-    let slide2 = pptx.addSlide();
-    slide2.addText('Ringkasan Keuangan', {
-        x: 0.5,
-        y: 0.5,
-        fontSize: 32,
-        bold: true,
-        color: '333333'
-    });
-    
-    const summaryRows = [
-        ['Kategori', 'Jumlah'],
-        ['Total Pemasukan', formatCurrency(totals.totalIncome)],
-        ['Total Pengeluaran', formatCurrency(totals.totalExpense)],
-        ['Saldo', formatCurrency(totals.balance)]
-    ];
-    
-    slide2.addTable(summaryRows, {
-        x: 1.5,
-        y: 1.5,
-        w: 6,
-        h: 2.5,
-        fontSize: 18,
-        border: { pt: 1, color: '667eea' },
-        fill: { color: 'F7F7F7' },
-        color: '333333',
-        align: 'center',
-        valign: 'middle'
-    });
-    
-    // Slide 3: Transactions
-    let slide3 = pptx.addSlide();
-    slide3.addText('Detail Transaksi', {
-        x: 0.5,
-        y: 0.3,
-        fontSize: 28,
-        bold: true,
-        color: '333333'
-    });
-    
-    const transactionRows = [
-        ['No', 'Tanggal', 'Keterangan', 'Kategori', 'Pemasukan', 'Pengeluaran']
-    ];
-    
-    transactions
-        .sort((a, b) => new Date(b.date) - new Date(a.date))
-        .slice(0, 10) // Limit to 10 transactions for better visibility
-        .forEach((t, index) => {
-            transactionRows.push([
-                (index + 1).toString(),
-                formatDate(t.date),
-                t.description,
-                t.category,
-                t.type === 'income' ? formatCurrency(t.amount) : '-',
-                t.type === 'expense' ? formatCurrency(t.amount) : '-'
-            ]);
-        });
-    
-    slide3.addTable(transactionRows, {
-        x: 0.3,
-        y: 1.0,
-        w: 9.4,
-        colW: [0.4, 1.5, 2.5, 1.5, 1.5, 1.5],
-        fontSize: 10,
-        border: { pt: 1, color: '667eea' },
-        fill: { color: 'F7F7F7' },
-        color: '333333',
-        align: 'center',
-        valign: 'middle'
-    });
-    
-    if (transactions.length > 10) {
-        slide3.addText(`Menampilkan 10 dari ${transactions.length} transaksi`, {
-            x: 0.5,
-            y: 5.2,
-            fontSize: 12,
-            color: '666666',
-            italic: true
-        });
-    }
-    
-    // Save PowerPoint
-    pptx.writeFile({ fileName: 'laporan-kas-arbonkas.pptx' });
+    // Open in new window
+    const printWindow = window.open('', '_blank');
+    printWindow.document.write(htmlContent);
+    printWindow.document.close();
 }

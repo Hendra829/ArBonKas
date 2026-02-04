@@ -35,36 +35,39 @@ Aplikasi web untuk mencatat pemasukan dan pengeluaran dengan fitur export ke ber
 - HTML5
 - CSS3
 - JavaScript (Vanilla)
-- jsPDF - untuk export PDF
-- SheetJS (xlsx) - untuk export Excel
-- FileSaver.js - untuk download file
-- PptxGenJS - untuk export PowerPoint
+- LocalStorage API untuk penyimpanan data
+- Browser Print API untuk export PDF
+- Blob API untuk export file
 
 ## 🎨 Fitur Export
 
 ### Export ke PDF
-Menghasilkan laporan PDF dengan:
+Membuka jendela baru dengan laporan yang dapat dicetak atau disimpan sebagai PDF menggunakan fungsi Print browser:
 - Header laporan
 - Ringkasan keuangan
 - Tabel detail transaksi
+- Klik "Print / Save as PDF" untuk menyimpan
 
 ### Export ke Excel
-Menghasilkan spreadsheet Excel dengan:
-- Sheet "Laporan Kas"
+Menghasilkan file CSV yang dapat dibuka di Excel:
+- Format CSV dengan encoding UTF-8
 - Ringkasan di bagian atas
 - Detail transaksi lengkap
+- Kompatibel dengan Microsoft Excel, Google Sheets, dll
 
 ### Export ke Word
-Menghasilkan dokumen Word dengan:
+Menghasilkan dokumen HTML yang dapat dibuka di Word:
 - Format dokumen profesional
 - Tabel ringkasan
 - Tabel detail transaksi
+- Dapat dibuka di Microsoft Word atau aplikasi pengolah kata lainnya
 
 ### Export ke PowerPoint
-Menghasilkan presentasi PowerPoint dengan:
+Membuka presentasi HTML yang dapat dicetak atau disimpan:
 - Slide judul
 - Slide ringkasan keuangan
-- Slide detail transaksi (max 10 transaksi terakhir)
+- Slide detail transaksi (max 8 transaksi terakhir)
+- Desain presentasi profesional
 
 ## 💾 Penyimpanan Data
 
