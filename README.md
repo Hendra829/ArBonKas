@@ -9,10 +9,10 @@ Aplikasi web untuk mencatat pemasukan dan pengeluaran dengan fitur export ke ber
 - 📝 Kategorisasi transaksi
 - 🗓️ Pencatatan tanggal transaksi
 - 💾 Penyimpanan data lokal (LocalStorage)
-- 📄 Export laporan ke PDF
-- 📊 Export laporan ke Excel (.xlsx)
-- 📝 Export laporan ke Word (.doc)
-- 📽️ Export laporan ke PowerPoint (.pptx)
+- 📄 Export laporan ke PDF (via browser print)
+- 📊 Export laporan ke CSV (dapat dibuka di Excel)
+- 📝 Export laporan ke Word (format HTML)
+- 📽️ Export laporan ke HTML presentation
 - 🗑️ Hapus transaksi individual
 - 🔄 Hapus semua data
 - 📱 Responsive design (mobile-friendly)
@@ -48,21 +48,21 @@ Membuka jendela baru dengan laporan yang dapat dicetak atau disimpan sebagai PDF
 - Tabel detail transaksi
 - Klik "Print / Save as PDF" untuk menyimpan
 
-### Export ke Excel
+### Export ke Excel (CSV)
 Menghasilkan file CSV yang dapat dibuka di Excel:
 - Format CSV dengan encoding UTF-8
 - Ringkasan di bagian atas
 - Detail transaksi lengkap
 - Kompatibel dengan Microsoft Excel, Google Sheets, dll
 
-### Export ke Word
+### Export ke Word (HTML)
 Menghasilkan dokumen HTML yang dapat dibuka di Word:
 - Format dokumen profesional
 - Tabel ringkasan
 - Tabel detail transaksi
 - Dapat dibuka di Microsoft Word atau aplikasi pengolah kata lainnya
 
-### Export ke PowerPoint
+### Export ke PowerPoint (HTML Presentation)
 Membuka presentasi HTML yang dapat dicetak atau disimpan:
 - Slide judul
 - Slide ringkasan keuangan
