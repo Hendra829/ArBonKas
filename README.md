@@ -21,6 +21,7 @@ ArBonKas adalah contoh aplikasi catatan kas sederhana untuk beberapa platform: A
 4. Hubungkan handphone Android dengan USB (aktifkan USB debugging) atau gunakan emulator.
 5. Tekan **Run** untuk menjalankan aplikasi.
 6. Jika ingin file instalasi, gunakan Android Studio: **Build > Build APK(s)** lalu salin APK ke handphone.
+7. Jika tersedia, Anda juga bisa mengunduh APK siap install dari menu **Releases** di GitHub (pilih file `.apk` terbaru).
 
 ### Flutter
 
