@@ -27,17 +27,14 @@ ArBonKas adalah contoh aplikasi catatan kas sederhana untuk beberapa platform: A
 #### Step-by-step di Android Studio (dengan screenshot)
 
 1. Buka **Tools > SDK Manager** untuk memastikan Android SDK dan Platform Tools terinstal.
-   ![SDK Manager di Android Studio](https://developer.android.com/images/tools/sdk-manager-2_0.png)
-   _Sumber: Android Developers_
+   Contoh tangkapan layar: https://developer.android.com/studio/intro/update#sdk-manager
 2. Buka **Tools > Device Manager** lalu buat atau jalankan emulator yang tersedia.
-   ![Toolbar emulator Android Studio](https://developer.android.com/studio/images/emulator/emulator-toolbar.png)
-   _Sumber: Android Developers_
+   Contoh panduan (dengan screenshot): https://developer.android.com/studio/run/managing-avds
 3. Jalankan aplikasi dengan memilih device di toolbar dan klik tombol **Run** (ikon segitiga hijau).
 4. Untuk APK rilis, pilih **Build > Generate Signed Bundle / APK** lalu pilih **APK**.
-   ![Dialog pembuatan keystore](https://developer.android.com/studio/images/publish/keystore-new_2x.png)
-   _Sumber: Android Developers_
+   Contoh dialog keystore: https://developer.android.com/studio/publish/app-signing
 
-> Catatan: tampilan UI bisa sedikit berbeda tergantung versi Android Studio.
+> Screenshot di atas diambil dari dokumentasi resmi Android Studio di Android Developers. Tampilan dapat sedikit berbeda tergantung versi Android Studio Anda.
 
 ### Flutter
 
