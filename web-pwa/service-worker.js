@@ -23,7 +23,29 @@ self.addEventListener('activate', event => {
 });
 
 self.addEventListener('fetch', event => {
+  const { request } = event;
+
+  if (request.mode === 'navigate') {
+    event.respondWith(
+      fetch(request).catch(() =>
+        caches.match('./index.html').then(
+          response =>
+            response ||
+            new Response('Anda sedang offline. Halaman hanya tersedia jika sudah tersimpan di cache.', {
+              status: 503,
+            })
+        )
+      )
+    );
+    return;
+  }
+
   event.respondWith(
-    caches.match(event.request).then(response => response || fetch(event.request)).catch(() => caches.match('./index.html'))
+    caches.match(request).then(response =>
+      response ||
+      fetch(request).catch(() =>
+        new Response('Resource tidak tersedia saat offline. Silakan coba lagi ketika online.', { status: 503 })
+      )
+    )
   );
 });
