@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ArBonKas - Aplikasi Kas</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Libraries for export functionality -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/docxtemplater/3.37.7/docxtemplater.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pizzip/3.1.4/pizzip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pptxgenjs/3.12.0/pptxgen.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>💰 ArBonKas - Aplikasi Kas</h1>
+            <p>Catatan Pemasukan dan Pengeluaran</p>
+        </header>
+
+        <div class="summary-cards">
+            <div class="card income-card">
+                <h3>Total Pemasukan</h3>
+                <p class="amount" id="totalIncome">Rp 0</p>
+            </div>
+            <div class="card expense-card">
+                <h3>Total Pengeluaran</h3>
+                <p class="amount" id="totalExpense">Rp 0</p>
+            </div>
+            <div class="card balance-card">
+                <h3>Saldo</h3>
+                <p class="amount" id="balance">Rp 0</p>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h2>Tambah Transaksi</h2>
+            <form id="transactionForm">
+                <div class="form-group">
+                    <label for="type">Tipe:</label>
+                    <select id="type" required>
+                        <option value="income">Pemasukan</option>
+                        <option value="expense">Pengeluaran</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="date">Tanggal:</label>
+                    <input type="date" id="date" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="description">Keterangan:</label>
+                    <input type="text" id="description" required placeholder="Contoh: Gaji, Belanja, dll">
+                </div>
+                
+                <div class="form-group">
+                    <label for="amount">Jumlah (Rp):</label>
+                    <input type="number" id="amount" required min="0" placeholder="0">
+                </div>
+                
+                <div class="form-group">
+                    <label for="category">Kategori:</label>
+                    <input type="text" id="category" required placeholder="Contoh: Operasional, Gaji, dll">
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Tambah Transaksi</button>
+            </form>
+        </div>
+
+        <div class="export-section">
+            <h2>Export Laporan</h2>
+            <div class="export-buttons">
+                <button onclick="exportToPDF()" class="btn btn-export">📄 Export ke PDF</button>
+                <button onclick="exportToExcel()" class="btn btn-export">📊 Export ke Excel</button>
+                <button onclick="exportToWord()" class="btn btn-export">📝 Export ke Word</button>
+                <button onclick="exportToPPT()" class="btn btn-export">📽️ Export ke PowerPoint</button>
+            </div>
+        </div>
+
+        <div class="table-section">
+            <div class="table-header">
+                <h2>Riwayat Transaksi</h2>
+                <button onclick="clearAllData()" class="btn btn-danger">Hapus Semua Data</button>
+            </div>
+            <div class="table-responsive">
+                <table id="transactionTable">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Tanggal</th>
+                            <th>Keterangan</th>
+                            <th>Kategori</th>
+                            <th>Pemasukan</th>
+                            <th>Pengeluaran</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="transactionBody">
+                        <!-- Transactions will be added here dynamically -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
