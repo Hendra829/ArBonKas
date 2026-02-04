@@ -15,10 +15,12 @@ ArBonKas adalah contoh aplikasi catatan kas sederhana untuk beberapa platform: A
 
 ### Android native (Kotlin)
 
-1. Buka folder `android-native` di Android Studio.
-2. Sinkronkan Gradle jika diminta.
-3. Hubungkan handphone Android dengan USB (aktifkan USB debugging) atau gunakan emulator.
-4. Tekan **Run** untuk menjalankan aplikasi.
+1. Unduh seluruh folder `android-native/` (atau clone repo ini).
+2. Buka folder `android-native` di Android Studio.
+3. Sinkronkan Gradle jika diminta.
+4. Hubungkan handphone Android dengan USB (aktifkan USB debugging) atau gunakan emulator.
+5. Tekan **Run** untuk menjalankan aplikasi.
+6. Jika ingin file instalasi, gunakan Android Studio: **Build > Build APK(s)** lalu salin APK ke handphone.
 
 ### Flutter
 
