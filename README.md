@@ -36,6 +36,86 @@ ArBonKas adalah contoh aplikasi catatan kas sederhana untuk beberapa platform: A
 
 > Screenshot di atas diambil dari dokumentasi resmi Android Studio di Android Developers. Tampilan dapat sedikit berbeda tergantung versi Android Studio Anda.
 
+#### Salin script Android native (untuk Android Studio)
+
+Jika Anda ingin menyalin script ArBonKas ke proyek Android Studio baru:
+
+1. Buat project baru dengan template **Empty Activity**.
+2. Gunakan **Package name**: `com.arbonkas` agar path file sama.
+3. Ganti isi file berikut dengan script di bawah.
+
+**app/src/main/AndroidManifest.xml**
+```xml
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.arbonkas">
+
+    <application
+        android:allowBackup="true"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@android:style/Theme.Material.Light.NoActionBar">
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>
+```
+
+**app/src/main/java/com/arbonkas/MainActivity.kt**
+```kotlin
+package com.arbonkas
+
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+    }
+}
+```
+
+**app/src/main/res/layout/activity_main.xml**
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ArBonKas"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="Catatan kas sederhana di Android native"
+        android:textSize="16sp" />
+</LinearLayout>
+```
+
+**app/src/main/res/values/strings.xml**
+```xml
+<resources>
+    <string name="app_name">ArBonKas</string>
+</resources>
+```
+
 ### Flutter
 
 1. Install Flutter SDK lalu jalankan `flutter doctor`.
