@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#2e7d32" />
+    <title>ArBonKas</title>
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="icon" href="./icons/icon-192.png" />
+    <style>
+      body {
+        font-family: 'Segoe UI', sans-serif;
+        margin: 0;
+        background: #f4f7f4;
+        color: #1b1b1b;
+      }
+      header {
+        background: #2e7d32;
+        color: white;
+        padding: 24px;
+        text-align: center;
+      }
+      main {
+        padding: 32px;
+        max-width: 720px;
+        margin: 0 auto;
+      }
+      .card {
+        background: white;
+        padding: 24px;
+        border-radius: 16px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+      }
+      .cta {
+        margin-top: 16px;
+        padding: 12px 16px;
+        display: inline-block;
+        background: #2e7d32;
+        color: white;
+        border-radius: 8px;
+        text-decoration: none;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>ArBonKas</h1>
+      <p>Catatan kas sederhana berbasis web PWA</p>
+    </header>
+    <main>
+      <div class="card">
+        <h2>Selamat datang</h2>
+        <p>Mulai catat pemasukan dan pengeluaran Anda dari perangkat mobile.</p>
+        <a class="cta" href="#">Mulai sekarang</a>
+      </div>
+    </main>
+    <script src="./app.js"></script>
+  </body>
+</html>
